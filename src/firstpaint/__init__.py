@@ -18,6 +18,8 @@ from .canvas import DEFAULT_HEIGHT as _DEFAULT_HEIGHT
 from .canvas import DEFAULT_WIDTH as _DEFAULT_WIDTH
 from .canvas import background, canvas, show
 from .color import fill, no_fill, no_stroke, stroke
+from .iterate import Cell, grid, repeat
+from .rand import pick, random_color, random_int, random_number, seed
 from .shapes import circle, line, rect, square, text, triangle
 
 # Live canvas size. These mirror ``canvas(...)``'s arguments so a learner can
@@ -50,4 +52,14 @@ __all__ = [
     "line",
     "triangle",
     "text",
+    # iteration
+    "repeat",
+    "grid",
+    "Cell",
+    # randomness
+    "seed",
+    "random_int",
+    "random_number",
+    "pick",
+    "random_color",
 ]

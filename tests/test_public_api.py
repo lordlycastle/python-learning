@@ -10,8 +10,10 @@ from __future__ import annotations
 import firstpaint
 
 
-def test_all_lists_phase_1_vocabulary():
+def test_all_lists_vocabulary():
+    """Phase 1 + Phase 2 vocabulary. Update this set when the vocab changes."""
     expected = {
+        # Phase 1
         "canvas",
         "background",
         "show",
@@ -27,6 +29,15 @@ def test_all_lists_phase_1_vocabulary():
         "line",
         "triangle",
         "text",
+        # Phase 2
+        "repeat",
+        "grid",
+        "Cell",
+        "seed",
+        "random_int",
+        "random_number",
+        "pick",
+        "random_color",
     }
     assert set(firstpaint.__all__) == expected
 
