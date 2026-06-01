@@ -50,6 +50,13 @@ state = _State()
 
 
 def reset_state() -> None:
-    """Reset the global state. Used by tests; not part of the public API."""
-    global state
-    state = _State()
+    """Reset the global state in place. Used by tests; not part of the public API.
+
+    Mutates fields on the existing singleton rather than rebinding the module
+    global, so every module that did ``from ._state import state`` continues
+    to observe the same object after a reset. Rebinding the global would leave
+    those importers holding a stale reference.
+    """
+    fresh = _State()
+    for field_name in fresh.__dataclass_fields__:
+        setattr(state, field_name, getattr(fresh, field_name))
