@@ -13,11 +13,16 @@ add ``animate(draw)`` for sketches that change over time.
 
 from __future__ import annotations
 
+import pathlib
 import sys
 
 from . import _state
 from ._state import state
 from .color import ColorLike, _parse
+
+# Used by ``_publish_dimensions`` to identify firstpaint's own frames so
+# they can be skipped when walking up the call stack to find user code.
+_PKG_PATH = pathlib.Path(__file__).resolve().parent
 
 # Default canvas size if a sketch never calls ``canvas(...)``. Picked to be
 # square, not tiny, and not so big it overflows a laptop screen.
@@ -40,26 +45,37 @@ def _publish_dimensions(w: int, h: int) -> None:
     new size — matching the §7 mental model where ``circle(width / 2, ...)``
     just works.
 
-    We update three places: the firstpaint package globals, the firstpaint
-    submodule re-export point if any, and the immediate caller's globals.
+    We update two places: the firstpaint package globals, and the first
+    user-code frame found by walking up the call stack. The frame walk
+    skips any frames inside the firstpaint package itself, so the trick
+    survives indirection — whether the user called ``canvas(...)``
+    directly, or it was opened lazily through ``_ensure_canvas`` from
+    inside ``animate``, the same user frame still gets patched.
     """
-    # The firstpaint package itself (so future ``import firstpaint;
-    # firstpaint.width`` reads correctly).
+    # 1. The firstpaint package itself (so ``firstpaint.width`` reads correctly).
     pkg = sys.modules.get("firstpaint")
     if pkg is not None:
-        setattr(pkg, "width", w)
-        setattr(pkg, "height", h)
+        pkg.width = w  # type: ignore[attr-defined]
+        pkg.height = h  # type: ignore[attr-defined]
 
-    # The caller's module globals (so a user who did ``from firstpaint import *``
-    # before calling ``canvas`` sees the update).
-    frame = sys._getframe(2) if hasattr(sys, "_getframe") else None  # _ensure_canvas → canvas → user
-    if frame is not None:
-        g = frame.f_globals
-        # Only patch names the user actually bound — never inject new ones.
-        if "width" in g:
-            g["width"] = w
-        if "height" in g:
-            g["height"] = h
+    # 2. The first non-firstpaint frame above us — that's the user.
+    if not hasattr(sys, "_getframe"):
+        return
+
+    pkg_dir = str(_PKG_PATH)
+    frame = sys._getframe(1)
+    while frame is not None:
+        filename = frame.f_code.co_filename or ""
+        # Skip frames whose code lives inside the firstpaint package.
+        if not filename.startswith(pkg_dir):
+            g = frame.f_globals
+            # Only patch names the user actually bound — never inject new ones.
+            if "width" in g:
+                g["width"] = w
+            if "height" in g:
+                g["height"] = h
+            return
+        frame = frame.f_back
 
 
 def _ensure_canvas() -> object:
