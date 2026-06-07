@@ -244,13 +244,11 @@ fill(random_color())
 
 ---
 
-## Coming next (Phase 3 — animation)
-
-These names don't work yet. Listed so you can see where the path leads.
+## Animation
 
 ### `animate(draw)`
 
-Hand the library a `draw` function and watch your sketch come alive. The function gets the time in seconds since the sketch started.
+Hand the library a function called `draw` and watch your sketch come alive. firstpaint will call your `draw` function 60 times a second. Each time, it hands you the number of seconds the sketch has been running.
 
 ```python
 def draw(time):
@@ -260,6 +258,30 @@ def draw(time):
 animate(draw)
 ```
 
-### `sin(x)`, `cos(x)`, `pi`
+Use `animate(draw)` **instead of** `show()`, not as well as. `animate` runs its own loop until you close the window.
 
-The maths trio for waves and circles. `sin` and `cos` smoothly wobble between -1 and 1; multiply them by a number to control how far things move.
+### `sin(x)`
+
+A number that smoothly wobbles between -1 and +1 as `x` grows. Useful for "make this thing breathe" or "make this thing wave."
+
+```python
+sin(0)        # 0
+sin(pi / 2)   # 1
+sin(pi)       # 0 (back to zero — one full sweep takes 2 * pi)
+```
+
+If you multiply, you stretch the wobble: `sin(time) * 50` wobbles between -50 and +50.
+
+### `cos(x)`
+
+Like `sin`, but starts at 1 instead of 0. Pair `cos` and `sin` together to trace a circle:
+
+```python
+x = width / 2 + cos(time) * 200
+y = height / 2 + sin(time) * 200
+circle(x, y, 20)
+```
+
+### `pi`
+
+The number 3.14159... You'll see it whenever you're thinking about full turns. `sin` and `cos` finish a full wobble every `2 * pi`.

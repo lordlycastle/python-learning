@@ -317,13 +317,9 @@ When you can build a simple picture without looking at this page, you're ready f
 
 ---
 
-## Coming next (Phase 3)
+## Task 15 — A breathing circle
 
-A preview of what's next, so you can see where this is heading.
-
-### Task 15 — A moving circle
-
-**Concept (preview): animation.**
+**Concept:** animation.
 
 ```python
 from firstpaint import *
@@ -333,11 +329,107 @@ canvas(600, 600)
 def draw(time):
     background("#fdf6e3")
     fill("#e67e22")
-    circle(width / 2, height / 2, 20 + sin(time) * 12)
+    no_stroke()
+    circle(width / 2, height / 2, 60 + sin(time) * 30)
 
 animate(draw)
 ```
 
-`animate` calls your `draw` function 60 times a second. Each time, it passes the number of seconds the sketch has been running. `sin(time)` is a number that smoothly wobbles between -1 and 1, so the circle grows and shrinks.
+A circle that grows and shrinks forever.
 
-*(This task needs `animate`, `sin`, and `pi`. They're not built yet — Phase 3.)*
+What changed:
+
+- You wrote a function called `draw(time)`. firstpaint will call it 60 times a second.
+- Each call, `time` is the number of seconds the sketch has been running.
+- `sin(time)` is a number that smoothly wobbles between -1 and +1. Multiplied by 30, it gives a number between -30 and +30. Added to 60, that's a radius between 30 and 90.
+- You called `animate(draw)` instead of `show()`. `animate` is its own loop. Don't put `show()` after it — `animate` already keeps the window open.
+
+Close the window to stop the sketch.
+
+---
+
+## Task 16 — Faster, slower
+
+**Concept:** scaling time.
+
+In Task 15, change `sin(time)` to `sin(time * 4)`. Run it. The circle breathes four times faster.
+
+Now try `sin(time * 0.3)`. Slower.
+
+The number you multiply `time` by is the **speed** of the wobble.
+
+Now change the `* 30` (the size of the wobble) to `* 100`. The circle grows and shrinks much more dramatically.
+
+You now have two knobs: **how fast** (`time * 4`) and **how big** (`* 100`).
+
+---
+
+## Task 17 — A circle that orbits
+
+**Concept:** `sin` and `cos` together.
+
+```python
+from firstpaint import *
+
+canvas(600, 600)
+
+def draw(time):
+    background("#0f1117")
+    fill("#fcd34d")
+    no_stroke()
+    x = width / 2 + cos(time) * 220
+    y = height / 2 + sin(time) * 220
+    circle(x, y, 22)
+
+animate(draw)
+```
+
+A dot orbiting the centre.
+
+`cos(time)` and `sin(time)` taken together trace a circle. Multiply both by the **radius** of the orbit. Add the **centre** of the orbit. That's it.
+
+Try changing `220` to `100`. Smaller orbit. Try `300`. Bigger.
+
+Try changing `time` to `time * 2`. Faster orbit.
+
+---
+
+## Task 18 — A wave of circles
+
+**Concept:** animation inside a loop.
+
+```python
+from firstpaint import *
+
+canvas(600, 300)
+
+def draw(time):
+    background("#fdf6e3")
+    fill("#2b9eb3")
+    no_stroke()
+    for i in repeat(12):
+        x = i * 50 + 25
+        y = height / 2 + sin(time * 2 + i * 0.4) * 60
+        circle(x, y, 18)
+
+animate(draw)
+
+```
+
+Twelve circles, bobbing up and down out of sync.
+
+The key trick: each circle's wobble is offset by `i * 0.4`. That's why the wave **travels** across the row instead of all dots moving in lockstep.
+
+Change `0.4` to `0` and run it. Now they move together. Change it to `1.5` and run it. Now they're scattered.
+
+---
+
+## Task 19 — Your moving sketch
+
+**Concept:** open task.
+
+Pick one of your earlier sketches and make something in it move. The simplest move is "wobble one number with `sin(time)`." The next-simplest is "let `time` drive `x` or `y`."
+
+You don't need to make the whole sketch animated. One moving thing is enough.
+
+When you can do this, you've reached the end of the path that this page lays out. The library has more inside it, but everything you need to build something interesting is on this page.

@@ -11,7 +11,7 @@ import firstpaint
 
 
 def test_all_lists_vocabulary():
-    """Phase 1 + Phase 2 vocabulary. Update this set when the vocab changes."""
+    """Phase 1 + Phase 2 + Phase 3 vocabulary. Update this set when the vocab changes."""
     expected = {
         # Phase 1
         "canvas",
@@ -38,6 +38,11 @@ def test_all_lists_vocabulary():
         "random_number",
         "pick",
         "random_color",
+        # Phase 3
+        "animate",
+        "sin",
+        "cos",
+        "pi",
     }
     assert set(firstpaint.__all__) == expected
 
