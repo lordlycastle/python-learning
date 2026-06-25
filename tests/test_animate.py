@@ -11,7 +11,7 @@ import math
 
 import pytest
 
-from firstpaint import animate, cos, pi, sin
+from firstpaint import animate, cos, pi, sin, tau
 from firstpaint._state import state
 
 
@@ -24,6 +24,14 @@ class TestTrigReexports:
 
     def test_pi_value(self):
         assert pi == math.pi
+
+    def test_tau_value(self):
+        assert tau == math.tau
+
+    def test_tau_is_two_pi(self):
+        # The whole point of tau: one full turn. Guarding the identity that
+        # makes ``sin(time * tau)`` mean "one cycle per second".
+        assert tau == pytest.approx(2 * pi)
 
     def test_sin_is_math_sin(self):
         # We promised re-export, not a wrapper. If this ever changes the

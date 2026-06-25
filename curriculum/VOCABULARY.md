@@ -285,3 +285,19 @@ circle(x, y, 20)
 ### `pi`
 
 The number 3.14159... You'll see it whenever you're thinking about full turns. `sin` and `cos` finish a full wobble every `2 * pi`.
+
+### `tau`
+
+One full turn — the same as `2 * pi` (about 6.283). Easier to read when you want a sketch to repeat once per second:
+
+```python
+def draw(time):
+    background("#fdf6e3")
+    circle(width / 2 + cos(time * tau) * 200,
+           height / 2 + sin(time * tau) * 200,
+           20)
+
+animate(draw)
+```
+
+`time * tau` means "one full turn per second." Multiply by 2 to go twice as fast, by 0.5 to go half as fast.

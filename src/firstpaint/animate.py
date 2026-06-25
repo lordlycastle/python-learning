@@ -1,4 +1,4 @@
-"""Animation vocabulary: ``animate``, plus ``sin``, ``cos``, ``pi``.
+"""Animation vocabulary: ``animate``, plus ``sin``, ``cos``, ``pi``, ``tau``.
 
 ``animate(draw)`` is the whole loop. The learner writes a ``draw(time)``
 function that paints one frame; firstpaint owns the rest — the timing,
@@ -14,11 +14,15 @@ the buffer flip, the close-window event. This is the §7 mental model:
 ``sin(time)`` smoothly wobbles between -1 and 1 once per ~6.28 seconds,
 ``sin(time * 2)`` wobbles twice as fast, and so on.
 
-``sin``, ``cos`` and ``pi`` are re-exported from the standard library
-``math`` module so a learner never has to write ``import math``. They take
-radians (not degrees). That trade-off is intentional: a learner who meets
-``pi`` once is better off than a learner who has to remember which version
-of ``sin`` they're calling.
+``sin``, ``cos``, ``pi`` and ``tau`` are re-exported from the standard
+library ``math`` module so a learner never has to write ``import math``.
+They take radians (not degrees). That trade-off is intentional: a learner
+who meets ``pi`` once is better off than a learner who has to remember
+which version of ``sin`` they're calling.
+
+``tau`` is one full turn (``2 * pi``). It exists so a learner who wants
+"one cycle per second" can write ``sin(time * tau)`` instead of
+``sin(time * 2 * pi)`` — the former reads as the thing it does.
 """
 
 from __future__ import annotations
@@ -33,6 +37,7 @@ from .canvas import _ensure_canvas
 sin = _math.sin
 cos = _math.cos
 pi = _math.pi
+tau = _math.tau
 
 
 DrawFn = Callable[[float], None]

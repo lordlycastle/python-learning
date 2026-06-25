@@ -43,6 +43,7 @@ def test_all_lists_vocabulary():
         "sin",
         "cos",
         "pi",
+        "tau",
     }
     assert set(firstpaint.__all__) == expected
 

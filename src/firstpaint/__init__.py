@@ -14,7 +14,7 @@ randomness, no loops yet — those come in Phases 2 and 3.
 
 from __future__ import annotations
 
-from .animate import animate, cos, pi, sin
+from .animate import animate, cos, pi, sin, tau
 from .canvas import DEFAULT_HEIGHT as _DEFAULT_HEIGHT
 from .canvas import DEFAULT_WIDTH as _DEFAULT_WIDTH
 from .canvas import background, canvas, show
@@ -68,4 +68,5 @@ __all__ = [
     "sin",
     "cos",
     "pi",
+    "tau",
 ]
