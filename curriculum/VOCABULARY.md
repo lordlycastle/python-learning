@@ -258,7 +258,7 @@ def draw(time):
 animate(draw)
 ```
 
-Use `animate(draw)` **instead of** `show()`, not as well as. `animate` runs its own loop until you close the window.
+Use `animate(draw)` **instead of** `show()`, not as well as. `animate` runs its own loop until you close the window or press **Esc**.
 
 ### `sin(x)`
 

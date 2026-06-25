@@ -51,7 +51,13 @@ def animate(draw: DrawFn, fps: int = 60, _frames: int | None = None) -> None:
     The loop owns the canvas: ``animate`` opens it with defaults if you
     haven't called ``canvas(...)`` yourself, ticks the frame clock, polls
     for the window close event, and quits cleanly when the user closes the
-    window or when ``draw`` raises.
+    window, presses **Esc**, or when ``draw`` raises.
+
+    Esc is the universal escape hatch: a beginner whose sketch runs amok
+    (an off-screen window, a runaway loop, a typo that fills the canvas
+    with noise) shouldn't have to hunt for the close button or kill the
+    terminal. Pressing Esc ends the loop the same way as closing the
+    window.
 
     If ``draw`` raises, the loop stops and the exception propagates — a
     learner's own bugs surface honestly. We only swallow the library's
@@ -76,6 +82,9 @@ def animate(draw: DrawFn, fps: int = 60, _frames: int | None = None) -> None:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    # Esc is a dedicated escape hatch — see the docstring.
                     running = False
             if not running:
                 break

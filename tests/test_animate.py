@@ -91,6 +91,42 @@ class TestAnimateLoop:
         assert state.initialised is False
 
 
+class TestAnimateEscape:
+    def test_escape_key_stops_loop(self):
+        import pygame
+
+        calls: list[float] = []
+
+        def draw(t: float) -> None:
+            calls.append(t)
+            # On the 2nd frame, post Esc. The event will be drained at the
+            # top of the *next* iteration, so the loop exits before draw is
+            # called a 3rd time.
+            if len(calls) == 2:
+                pygame.event.post(
+                    pygame.event.Event(pygame.KEYDOWN, key=pygame.K_ESCAPE)
+                )
+
+        animate(draw, fps=60, _frames=10)
+        assert len(calls) == 2
+
+    def test_non_escape_keydown_does_not_stop_loop(self):
+        import pygame
+
+        calls: list[float] = []
+
+        def draw(t: float) -> None:
+            calls.append(t)
+            if len(calls) == 1:
+                # Some other key — must not terminate the loop.
+                pygame.event.post(
+                    pygame.event.Event(pygame.KEYDOWN, key=pygame.K_SPACE)
+                )
+
+        animate(draw, fps=60, _frames=4)
+        assert len(calls) == 4
+
+
 class TestAnimateForgiving:
     def test_fps_clamps_to_at_least_one(self):
         def draw(t: float) -> None:
