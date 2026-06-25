@@ -94,6 +94,18 @@ def random_color() -> RGBA:
     in a beginner's first grid; HSV-based randomness gives consistently
     pleasant output. The output is still a normal ``(r, g, b, a)`` tuple
     the rest of the library can pass to pygame unchanged.
+
+    Locked design choice [Verified by owner review, 2026-06-25]:
+        - Hue uniform across the full wheel.
+        - Saturation in 0.65–0.90 (never washed out, never neon).
+        - Value (brightness) in 0.80–0.95 (always readable on the off-white
+          default background; never near-black).
+
+        These bounds are part of the contract. ``random_color()`` is one
+        of the first tasks in the curriculum — a beginner's "make this
+        pretty" knob. Widening the bounds (or switching to RGB) would
+        re-introduce the muddy-output failure mode it was tuned away from.
+        Change only with a curriculum revision.
     """
     hue = _rng.random()
     saturation = 0.65 + _rng.random() * 0.25  # 0.65–0.90
