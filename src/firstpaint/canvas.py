@@ -51,6 +51,25 @@ def _publish_dimensions(w: int, h: int) -> None:
     survives indirection — whether the user called ``canvas(...)``
     directly, or it was opened lazily through ``_ensure_canvas`` from
     inside ``animate``, the same user frame still gets patched.
+
+    Why this exists (do not rip out without reading §7):
+        The two alternatives are both worse for a beginner:
+
+        1. Expose ``firstpaint.width`` / ``firstpaint.height`` and tell the
+           learner to write ``circle(firstpaint.width / 2, ...)``. That
+           forces a *namespace* concept on someone who hasn't met modules
+           yet, and it breaks the ``from firstpaint import *`` promise that
+           the library is one flat vocabulary.
+
+        2. Make ``width`` and ``height`` functions instead of names —
+           ``circle(width() / 2, ...)``. That adds parentheses that mean
+           nothing to a learner, and inverts how every other dimension
+           number in the rest of the curriculum is written.
+
+        Patching globals is mildly magical, but the magic stays invisible
+        to the learner — which is exactly the §3 trade-off the project
+        opts into. Internal plumbing is allowed to be clever so long as
+        the surface stays plain.
     """
     # 1. The firstpaint package itself (so ``firstpaint.width`` reads correctly).
     pkg = sys.modules.get("firstpaint")
