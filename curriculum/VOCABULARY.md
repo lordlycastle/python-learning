@@ -260,6 +260,8 @@ animate(draw)
 
 Use `animate(draw)` **instead of** `show()`, not as well as. `animate` runs its own loop until you close the window or press **Esc**.
 
+Once `animate(draw)` ends, the canvas is gone. If you want to start a brand-new sketch in the same file, call `canvas(...)` again before drawing anything new.
+
 ### `sin(x)`
 
 A number that smoothly wobbles between -1 and +1 as `x` grows. Useful for "make this thing breathe" or "make this thing wave."

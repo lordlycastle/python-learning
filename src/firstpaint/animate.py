@@ -67,6 +67,19 @@ def animate(draw: DrawFn, fps: int = 60, _frames: int | None = None) -> None:
     If ``draw`` raises, the loop stops and the exception propagates — a
     learner's own bugs surface honestly. We only swallow the library's
     plumbing, never the learner's.
+
+    State reset:
+        When ``animate`` returns (cleanly, on Esc, on QUIT, or because
+        ``draw`` raised), the canvas state is wiped in ``finally``. The
+        window closes and the surface is gone. To start a *second* sketch
+        in the same Python process, call ``canvas(...)`` again before any
+        further drawing — the shape calls' lazy default-canvas path will
+        also work, but an explicit ``canvas(...)`` is clearer.
+
+        This is deliberate: persisting a torn-down surface across calls
+        produces stranger bugs (stale dimensions, a closed pygame window
+        that still claims to be initialised) than the rule "one sketch
+        per canvas." [Assumption — flagged in VOCABULARY for the owner.]
     """
     import pygame  # type: ignore[import-not-found]
 
